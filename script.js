@@ -105,7 +105,7 @@ animateSelectors.forEach(selector => {
 // ── Contact form ─────────────────────────────────────────────
 // Submissions are appended as rows to a Google Sheet via an Apps Script
 // Web App endpoint. Deploy the script and paste its /exec URL below.
-const SHEET_ENDPOINT = 'PASTE_YOUR_APPS_SCRIPT_WEB_APP_URL_HERE';
+const SHEET_ENDPOINT = 'https://script.google.com/macros/s/AKfycbz5MoISa2XW9iagrNqBONiuQ1012VMAXN_cuOXOTVNWZ3xXbj1UjKm4PY9so03MEPMVWw/exec';
 
 const contactForm = document.getElementById('contactForm');
 
