@@ -103,6 +103,10 @@ animateSelectors.forEach(selector => {
 
 
 // ── Contact form ─────────────────────────────────────────────
+// Submissions are appended as rows to a Google Sheet via an Apps Script
+// Web App endpoint. Deploy the script and paste its /exec URL below.
+const SHEET_ENDPOINT = 'PASTE_YOUR_APPS_SCRIPT_WEB_APP_URL_HERE';
+
 const contactForm = document.getElementById('contactForm');
 
 if (contactForm) {
@@ -110,12 +114,19 @@ if (contactForm) {
     e.preventDefault();
 
     const btn = contactForm.querySelector('button[type="submit"]');
-    const originalText = btn.textContent;
     btn.textContent = 'Sending…';
     btn.disabled = true;
 
-    // Simulate submission (replace with real endpoint)
-    setTimeout(() => {
+    const payload = {
+      firstName: contactForm.firstName.value,
+      lastName: contactForm.lastName.value,
+      email: contactForm.email.value,
+      brand: contactForm.brand.value,
+      service: contactForm.services.value,
+      message: contactForm.message.value,
+    };
+
+    const showSuccess = () => {
       contactForm.innerHTML = `
         <div class="form-success" style="display:flex; flex-direction:column; align-items:center; gap:16px; padding:48px 24px; text-align:center;">
           <div style="width:60px;height:60px;background:rgba(16,185,129,0.12);border:1px solid rgba(16,185,129,0.3);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:28px;">✓</div>
@@ -123,7 +134,30 @@ if (contactForm) {
           <p style="color:#a1a1b0;font-size:15px;max-width:320px;line-height:1.6;">Thanks for reaching out. We'll review your details and get back to you within 24 hours.</p>
         </div>
       `;
-    }, 1200);
+    };
+
+    const showError = () => {
+      btn.textContent = 'Send My Enquiry →';
+      btn.disabled = false;
+      alert("Something went wrong sending your enquiry. Please email us directly at Ops@thryvegrowth.com");
+    };
+
+    // Apps Script web apps don't handle CORS preflight, so this is sent as a
+    // simple request (text/plain body) to avoid triggering an OPTIONS check.
+    fetch(SHEET_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(payload),
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error('Request failed');
+        return res.json();
+      })
+      .then((data) => {
+        if (data.result === 'success') showSuccess();
+        else throw new Error(data.error || 'Unknown error');
+      })
+      .catch(showError);
   });
 }
 
