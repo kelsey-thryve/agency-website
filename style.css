@@ -757,6 +757,15 @@ img { display: block; max-width: 100%; }
   grid-column: 4 / span 2;
 }
 
+.cs-swipe-hint {
+  display: none;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--gray-3);
+  margin-bottom: 16px;
+}
+
 @media (max-width: 1024px) {
   .cs-grid--five {
     grid-template-columns: repeat(2, 1fr);
@@ -769,13 +778,28 @@ img { display: block; max-width: 100%; }
 }
 
 @media (max-width: 640px) {
+  .cs-swipe-hint { display: block; }
+
   .cs-grid--five {
-    grid-template-columns: 1fr;
+    display: flex;
+    grid-template-columns: unset;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    gap: 16px;
+    margin: 0 -24px;
+    padding: 4px 24px 12px;
   }
+
+  .cs-grid--five::-webkit-scrollbar { display: none; }
+
   .cs-grid--five > .cs-card,
   .cs-grid--five > .cs-card:nth-child(4),
   .cs-grid--five > .cs-card:nth-child(5) {
-    grid-column: span 1;
+    grid-column: unset;
+    flex: 0 0 85%;
+    scroll-snap-align: center;
   }
 }
 
@@ -860,6 +884,10 @@ img { display: block; max-width: 100%; }
   grid-template-columns: repeat(4, 1fr);
 }
 
+.cs-metrics--2col {
+  grid-template-columns: repeat(2, 1fr);
+}
+
 .cs-metric {
   background: rgba(255,255,255,0.03);
   border: 1px solid var(--border);
@@ -902,6 +930,96 @@ img { display: block; max-width: 100%; }
   padding: 3px 10px;
   border-radius: 100px;
 }
+
+/* ── Case study charts ────────────────────────────────────── */
+.cs-chart-block { margin-bottom: 20px; }
+
+.cs-chart-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 6px;
+}
+
+.cs-chart-title {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--gray-3);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.cs-chart-headline {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--white);
+}
+
+.cs-chart-svg {
+  display: block;
+  width: 100%;
+  height: 110px;
+  overflow: visible;
+}
+
+.cs-chart-line {
+  fill: none;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  transition: stroke-dashoffset 1.1s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.cs-chart.is-drawn .cs-chart-line { stroke-dashoffset: 0; }
+
+.cs-chart-dot {
+  fill: var(--bg-card);
+  stroke-width: 2.5;
+  opacity: 0;
+  transform: scale(0);
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  transition-delay: 0.9s;
+}
+
+.cs-chart.is-drawn .cs-chart-dot { opacity: 1; transform: scale(1); }
+
+.cs-chart-bar {
+  fill: currentColor;
+  opacity: 0.85;
+  transition: height 0.9s cubic-bezier(0.65, 0, 0.35, 1), y 0.9s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.cs-chart-value {
+  font-size: 9px;
+  font-weight: 700;
+  fill: var(--white);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  transition-delay: 1s;
+}
+
+.cs-chart.is-drawn .cs-chart-value { opacity: 1; }
+
+.cs-chart-label {
+  font-size: 8px;
+  fill: var(--gray-3);
+  font-weight: 500;
+}
+
+.cs-chart--pink   { color: #f472b6; }
+.cs-chart--pink .cs-chart-line, .cs-chart--pink .cs-chart-dot { stroke: #f472b6; }
+.cs-chart--blue   { color: #60a5fa; }
+.cs-chart--blue .cs-chart-line, .cs-chart--blue .cs-chart-dot { stroke: #60a5fa; }
+.cs-chart--purple { color: #c084fc; }
+.cs-chart--purple .cs-chart-line, .cs-chart--purple .cs-chart-dot { stroke: #c084fc; }
+.cs-chart--orange { color: #fb923c; }
+.cs-chart--orange .cs-chart-line, .cs-chart--orange .cs-chart-dot { stroke: #fb923c; }
+.cs-chart--teal   { color: #2dd4bf; }
+.cs-chart--teal .cs-chart-line, .cs-chart--teal .cs-chart-dot { stroke: #2dd4bf; }
 
 .cs-more-coming {
   margin-top: 40px;
@@ -1256,30 +1374,21 @@ img { display: block; max-width: 100%; }
   margin-bottom: 32px;
 }
 
-.contact-details {
+.contact-form-wrap {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 16px;
 }
 
-.contact-detail {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  font-size: 15px;
+.contact-form-email {
+  text-align: center;
+  font-size: 14px;
   color: var(--gray-2);
 }
 
-.contact-detail-icon {
-  width: 36px;
-  height: 36px;
-  background: rgba(99,102,241,0.1);
-  border: 1px solid rgba(99,102,241,0.2);
-  border-radius: var(--radius);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 16px;
+.contact-form-email a {
+  color: var(--indigo-light);
+  font-weight: 600;
 }
 
 .contact-form {
@@ -1378,7 +1487,6 @@ img { display: block; max-width: 100%; }
   .contact-text .section-title { text-align: center; }
   .contact-text .section-badge { display: block; text-align: center; }
   .contact-text > p { text-align: center; }
-  .contact-details { align-items: center; }
 }
 
 @media (max-width: 480px) {
