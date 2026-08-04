@@ -102,6 +102,82 @@ animateSelectors.forEach(selector => {
 });
 
 
+// ── Case study charts ────────────────────────────────────────
+// Renders animated SVG line/bar charts from data-* attributes on .cs-chart
+// elements, then draws them in once each scrolls into view.
+function buildLineChart(values, labels, { suffix = '', prefix = '' } = {}) {
+  const w = 300, h = 110, padX = 20, padTop = 26, padBottom = 20;
+  const max = Math.max(...values);
+  const min = Math.min(0, Math.min(...values));
+  const range = (max - min) || 1;
+  const stepX = values.length > 1 ? (w - padX * 2) / (values.length - 1) : 0;
+  const scaleY = (v) => h - padBottom - ((v - min) / range) * (h - padTop - padBottom);
+
+  const points = values.map((v, i) => [padX + i * stepX, scaleY(v)]);
+  const pathD = points.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p[0].toFixed(1)} ${p[1].toFixed(1)}`).join(' ');
+
+  const dots = points.map(([x, y], i) => `
+    <circle class="cs-chart-dot" cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="3.5"></circle>
+    <text class="cs-chart-value" x="${x.toFixed(1)}" y="${(y - 10).toFixed(1)}" text-anchor="middle">${prefix}${values[i]}${suffix}</text>
+  `).join('');
+
+  const labelEls = labels.map((l, i) => `<text class="cs-chart-label" x="${points[i][0].toFixed(1)}" y="${h - 4}" text-anchor="middle">${l}</text>`).join('');
+
+  return `<svg class="cs-chart-svg" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none">
+    <path class="cs-chart-line" d="${pathD}" pathLength="1"></path>
+    ${dots}
+    ${labelEls}
+  </svg>`;
+}
+
+function buildBarChart(values, labels, { suffix = '', prefix = '' } = {}) {
+  const w = 300, h = 110, padX = 10, padTop = 28, padBottom = 20, gap = 6;
+  const max = Math.max(...values) * 1.15;
+  const barW = (w - padX * 2 - gap * (values.length - 1)) / values.length;
+  const baseline = h - padBottom;
+
+  const bars = values.map((v, i) => {
+    const barH = (v / max) * (baseline - padTop);
+    const x = padX + i * (barW + gap);
+    const y = baseline - barH;
+    return `
+      <rect class="cs-chart-bar" x="${x.toFixed(1)}" y="${baseline}" width="${barW.toFixed(1)}" height="0" rx="3" data-final-y="${y.toFixed(1)}" data-final-height="${barH.toFixed(1)}"></rect>
+      <text class="cs-chart-value" x="${(x + barW / 2).toFixed(1)}" y="${(y - 7).toFixed(1)}" text-anchor="middle">${prefix}${values[i]}${suffix}</text>
+      <text class="cs-chart-label" x="${(x + barW / 2).toFixed(1)}" y="${h - 4}" text-anchor="middle">${labels[i]}</text>
+    `;
+  }).join('');
+
+  return `<svg class="cs-chart-svg" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none">${bars}</svg>`;
+}
+
+const chartEls = document.querySelectorAll('.cs-chart');
+
+chartEls.forEach(el => {
+  const values = el.dataset.values.split(',').map(Number);
+  const labels = el.dataset.labels.split(',');
+  const opts = { suffix: el.dataset.suffix || '', prefix: el.dataset.prefix || '' };
+
+  el.innerHTML = el.dataset.type === 'bar'
+    ? buildBarChart(values, labels, opts)
+    : buildLineChart(values, labels, opts);
+});
+
+const chartObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (!entry.isIntersecting) return;
+    const el = entry.target;
+    el.classList.add('is-drawn');
+    el.querySelectorAll('.cs-chart-bar').forEach(bar => {
+      bar.setAttribute('y', bar.dataset.finalY);
+      bar.setAttribute('height', bar.dataset.finalHeight);
+    });
+    chartObserver.unobserve(el);
+  });
+}, { threshold: 0.35 });
+
+chartEls.forEach(el => chartObserver.observe(el));
+
+
 // ── Contact form ─────────────────────────────────────────────
 // Submissions are appended as rows to a Google Sheet via an Apps Script
 // Web App endpoint. Deploy the script and paste its /exec URL below.
@@ -142,21 +218,17 @@ if (contactForm) {
       alert("Something went wrong sending your enquiry. Please email us directly at Ops@thryvegrowth.com");
     };
 
-    // Apps Script web apps don't handle CORS preflight, so this is sent as a
-    // simple request (text/plain body) to avoid triggering an OPTIONS check.
+    // Apps Script web apps don't reliably send CORS headers back, so the
+    // browser blocks reading the response even though the request succeeds
+    // server-side. Send it in no-cors mode and treat a resolved fetch (i.e.
+    // no network-level failure) as success rather than trying to read it.
     fetch(SHEET_ENDPOINT, {
       method: 'POST',
+      mode: 'no-cors',
       headers: { 'Content-Type': 'text/plain;charset=utf-8' },
       body: JSON.stringify(payload),
     })
-      .then((res) => {
-        if (!res.ok) throw new Error('Request failed');
-        return res.json();
-      })
-      .then((data) => {
-        if (data.result === 'success') showSuccess();
-        else throw new Error(data.error || 'Unknown error');
-      })
+      .then(showSuccess)
       .catch(showError);
   });
 }
