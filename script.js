@@ -142,21 +142,17 @@ if (contactForm) {
       alert("Something went wrong sending your enquiry. Please email us directly at Ops@thryvegrowth.com");
     };
 
-    // Apps Script web apps don't handle CORS preflight, so this is sent as a
-    // simple request (text/plain body) to avoid triggering an OPTIONS check.
+    // Apps Script web apps don't reliably send CORS headers back, so the
+    // browser blocks reading the response even though the request succeeds
+    // server-side. Send it in no-cors mode and treat a resolved fetch (i.e.
+    // no network-level failure) as success rather than trying to read it.
     fetch(SHEET_ENDPOINT, {
       method: 'POST',
+      mode: 'no-cors',
       headers: { 'Content-Type': 'text/plain;charset=utf-8' },
       body: JSON.stringify(payload),
     })
-      .then((res) => {
-        if (!res.ok) throw new Error('Request failed');
-        return res.json();
-      })
-      .then((data) => {
-        if (data.result === 'success') showSuccess();
-        else throw new Error(data.error || 'Unknown error');
-      })
+      .then(showSuccess)
       .catch(showError);
   });
 }
