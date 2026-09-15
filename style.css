@@ -798,6 +798,32 @@ img { display: block; max-width: 100%; }
   border-color: rgba(99,102,241,0.2);
 }
 
+.cs-card-img {
+  width: calc(100% + 48px);
+  margin: -24px -24px 20px;
+  height: 200px;
+  overflow: hidden;
+  border-radius: var(--radius) var(--radius) 0 0;
+}
+
+.cs-card-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
+  transition: transform 0.4s ease;
+}
+
+.cs-card:hover .cs-card-img img {
+  transform: scale(1.04);
+}
+
+.cs-card-img img[src=""] ,
+.cs-card-img img:not([src]) {
+  display: none;
+}
+
 .cs-card--wide { max-width: 100%; }
 
 .cs-card-header {
