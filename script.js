@@ -162,6 +162,48 @@ if (contactForm) {
 }
 
 
+// ── Process carousel ─────────────────────────────────────────
+const slides = document.querySelectorAll('.process-slide');
+const dots   = document.querySelectorAll('.process-dot');
+
+if (slides.length) {
+  let current = 0;
+  let timer;
+
+  function goTo(index) {
+    slides[current].classList.remove('active');
+    dots[current].classList.remove('active');
+    current = index;
+    slides[current].classList.add('active');
+    dots[current].classList.add('active');
+  }
+
+  function next() {
+    goTo((current + 1) % slides.length);
+  }
+
+  function startTimer() {
+    clearInterval(timer);
+    timer = setInterval(next, 3000);
+  }
+
+  dots.forEach(dot => {
+    dot.addEventListener('click', () => {
+      goTo(Number(dot.dataset.step));
+      startTimer();
+    });
+  });
+
+  const carousel = document.querySelector('.process-carousel');
+  if (carousel) {
+    carousel.addEventListener('mouseenter', () => clearInterval(timer));
+    carousel.addEventListener('mouseleave', startTimer);
+  }
+
+  startTimer();
+}
+
+
 // ── Smooth scroll for anchor links ──────────────────────────
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
   anchor.addEventListener('click', (e) => {

@@ -582,113 +582,139 @@ img { display: block; max-width: 100%; }
    ============================================================ */
 .process { background: var(--bg-2); }
 
-.process-steps {
+/* ── Process carousel layout ─────────────────────────────── */
+.process-layout {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 0;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+  min-height: 380px;
+}
+
+.process-static {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.process-static .section-title {
+  font-size: clamp(28px, 4vw, 44px);
+  margin-bottom: 0;
+}
+
+.process-static .section-subtitle {
+  margin-bottom: 0;
+}
+
+.process-dots {
+  display: flex;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.process-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255,255,255,0.15);
+  cursor: pointer;
+  transition: background 0.3s, transform 0.3s;
+  padding: 0;
+}
+
+.process-dot.active {
+  background: var(--indigo);
+  transform: scale(1.3);
+}
+
+.process-carousel {
   position: relative;
+  height: 280px;
 }
 
-.process-steps--six {
-  grid-template-columns: repeat(3, 1fr);
-  row-gap: 56px;
-}
-
-.process-steps::before {
-  content: '';
+.process-slide {
   position: absolute;
-  top: 28px;
-  left: 0; right: 0;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, rgba(99,102,241,0.4), rgba(16,185,129,0.4), transparent);
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 16px;
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
   pointer-events: none;
 }
 
-.process-steps--six::before {
-  display: none;
+.process-slide.active {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
 }
 
-.process-step {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  padding: 0 20px 0;
-  position: relative;
+.slide-number {
+  font-size: clamp(80px, 12vw, 140px);
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  background: var(--gradient-text);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
-.process-step .step-arrow {
-  display: none;
-}
-
-.step-number {
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  background: var(--bg-card);
-  border: 2px solid rgba(99,102,241,0.3);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 14px;
+.slide-title {
+  font-size: clamp(28px, 4vw, 48px);
   font-weight: 800;
-  color: var(--indigo-light);
-  margin-bottom: 20px;
-  position: relative;
-  z-index: 1;
-  transition: border-color var(--transition), background var(--transition);
-}
-
-.step-number--green {
-  border-color: rgba(16,185,129,0.4);
-  color: var(--green-light);
-  background: rgba(16,185,129,0.08);
-}
-
-.process-step:hover .step-number {
-  border-color: var(--indigo);
-  background: rgba(99,102,241,0.1);
-}
-
-.step-content h3 {
-  font-size: 16px;
-  font-weight: 700;
   color: var(--white);
-  margin-bottom: 10px;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.02em;
 }
 
-.step-content p {
-  font-size: 13px;
-  color: var(--gray-2);
-  line-height: 1.6;
+.slide-progress {
+  width: 100%;
+  height: 2px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-top: 8px;
 }
 
-.process-step--final .step-number {
-  background: rgba(16,185,129,0.1);
-  border-color: rgba(16,185,129,0.4);
+.slide-progress-bar {
+  height: 100%;
+  width: 0%;
+  background: var(--gradient);
+  border-radius: 2px;
 }
 
-@media (max-width: 1024px) {
-  .process-steps {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 40px;
-  }
-  .process-steps::before { display: none; }
-  .process-steps--six {
-    grid-template-columns: repeat(2, 1fr);
-    row-gap: 40px;
-  }
+.process-slide.active .slide-progress-bar {
+  animation: slideProgress 3s linear forwards;
 }
 
-@media (max-width: 640px) {
-  .process-steps {
+@keyframes slideProgress {
+  from { width: 0%; }
+  to   { width: 100%; }
+}
+
+@media (max-width: 900px) {
+  .process-layout {
     grid-template-columns: 1fr;
-    gap: 32px;
+    gap: 48px;
+    min-height: auto;
   }
-  .process-steps--six {
-    grid-template-columns: 1fr;
-    row-gap: 32px;
+  .process-carousel {
+    height: 220px;
+  }
+  .slide-number {
+    font-size: clamp(64px, 18vw, 100px);
+  }
+  .slide-title {
+    font-size: clamp(24px, 6vw, 36px);
+  }
+}
+
+@media (max-width: 480px) {
+  .process-carousel {
+    height: 200px;
   }
 }
 
