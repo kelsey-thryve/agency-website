@@ -347,10 +347,13 @@
         </div>
         <div class="wd-demo-body" id="wdDemoBody">
           <!--
-            TODO (Kelsey): set DEMO_URL below once the wardrobe-app is deployed
-            (e.g. to Vercel, with GEMINI_API_KEY + optional RESEND_API_KEY set) and
-            point it at that URL. The iframe will then load automatically and this
-            fallback card will no longer be shown. No other page changes needed.
+            DEMO_URL below is set to the deployed wardrobe-app (Vercel). Note:
+            the automated build session that wired this up could not reach
+            *.vercel.app from its sandbox (network egress policy) to click
+            through the actual photo-upload -> render -> chat -> lead-capture
+            flow end to end. Please do one manual run-through before relying
+            on this for live outreach traffic. If it ever needs to fall back
+            to the placeholder card again, just blank out DEMO_URL below.
           -->
           <div class="wd-demo-fallback" id="wdDemoFallback">
             <div class="wd-pulse">✦</div>
@@ -408,12 +411,8 @@
         <div class="section-badge">Get Started</div>
         <h2 class="section-title">See This On<br /><span class="gradient-text">Your Website</span></h2>
         <p class="wd-book-sub">Book a live walkthrough and we'll show you exactly how it plugs into your site and starts booking measures.</p>
-        <!--
-          TODO (Kelsey): replace the mailto: link below with your real booking
-          link (Calendly / Google Calendar) before this page goes live to prospects.
-        -->
-        <a href="mailto:kelsey@thryvegrowth.com?subject=Wardrobe%20Designer%20Demo&body=Hi%20Kelsey%2C%0A%0AI%27d%20like%20to%20book%20a%20demo%20of%20the%20wardrobe%20designer%20tool.%0A%0A" class="btn btn-primary btn-lg">Book a Demo</a>
-        <p class="wd-book-note">Booking link coming soon — this currently opens an email to Kelsey directly.</p>
+        <a href="https://calendar.app.google/HitT1jkHamtfadhZ8" target="_blank" rel="noopener" class="btn btn-primary btn-lg">Book a Demo</a>
+        <p class="wd-book-note">Pick a time that works for you — we'll walk you through it live.</p>
       </div>
     </div>
   </section>
@@ -425,10 +424,10 @@
   </footer>
 
   <script>
-    // Live demo embed: set DEMO_URL once the wardrobe-app tool is deployed.
-    // Until then, the fallback card above stays visible and no request is made.
+    // Live demo embed. Blank out DEMO_URL to fall back to the placeholder card
+    // above instead (e.g. if the deployed tool goes down).
     (function () {
-      var DEMO_URL = ""; // e.g. "https://wardrobe-app-xyz.vercel.app"
+      var DEMO_URL = "https://wardrobe-app-seven-cyan.vercel.app/";
       if (!DEMO_URL) return;
       var iframe = document.getElementById('wdDemoIframe');
       var fallback = document.getElementById('wdDemoFallback');
