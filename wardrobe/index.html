@@ -80,25 +80,29 @@
       .wd-benefits-grid { grid-template-columns: repeat(2, 1fr); gap: 36px 24px; }
     }
 
-    /* -- How it works (vertical timeline) -- */
+    /* -- How it works (vertical timeline, centered) -- */
     .wd-steps {
       display: flex;
       flex-direction: column;
+      align-items: center;
       gap: 0;
-      max-width: 560px;
+      max-width: 420px;
       margin: 0 auto;
     }
     .wd-step {
       display: flex;
+      flex-direction: column;
       align-items: center;
-      gap: 20px;
+      gap: 12px;
       padding: 20px 0;
       position: relative;
+      text-align: center;
     }
     .wd-step:not(:last-child)::after {
       content: '';
       position: absolute;
-      left: 21px;
+      left: 50%;
+      transform: translateX(-50%);
       top: 62px;
       bottom: -12px;
       width: 2px;
@@ -168,9 +172,8 @@
 
     /* -- Before / after -- */
     .wd-ba-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 24px;
+      max-width: 640px;
+      margin: 0 auto;
     }
     .wd-ba-card {
       background: var(--bg-card);
@@ -188,10 +191,6 @@
     }
     .wd-ba-img svg { width: 34%; height: 34%; opacity: 0.28; color: var(--gray-2); }
     .wd-ba-caption { padding: 14px 16px 16px; font-size: 12px; color: var(--gray-3); border-top: 1px solid var(--border); }
-
-    @media (max-width: 860px) {
-      .wd-ba-grid { grid-template-columns: 1fr; }
-    }
 
     /* -- Book a demo / contact -- */
     .wd-book { text-align: center; }
@@ -370,21 +369,13 @@
       <div class="section-header">
         <div class="section-badge">Real Rooms</div>
         <h2 class="section-title">Before &amp;<br /><span class="gradient-text">After</span></h2>
-        <p class="section-subtitle">Photos from real installs go here — every card below is a drop-in placeholder, ready to swap for client shots.</p>
+        <p class="section-subtitle">A photo from a real install goes here — this is a drop-in placeholder, ready to swap for a client shot.</p>
       </div>
 
       <div class="wd-ba-grid">
-        <!-- Each card takes one image by src alone — no layout changes needed to add real photos. -->
+        <!-- Single image by src alone — no layout changes needed to add a real photo. -->
         <div class="wd-ba-card">
           <div class="wd-ba-img" data-slot="room-1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="1"/><path d="M8 3v18M14 3v18M3 9h5M16 9h5M3 15h5M16 15h5"/></svg></div>
-          <p class="wd-ba-caption">Photo placeholder — real client install coming soon</p>
-        </div>
-        <div class="wd-ba-card">
-          <div class="wd-ba-img" data-slot="room-2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="1"/><path d="M8 3v18M14 3v18M3 9h5M16 9h5M3 15h5M16 15h5"/></svg></div>
-          <p class="wd-ba-caption">Photo placeholder — real client install coming soon</p>
-        </div>
-        <div class="wd-ba-card">
-          <div class="wd-ba-img" data-slot="room-3"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="1"/><path d="M8 3v18M14 3v18M3 9h5M16 9h5M3 15h5M16 15h5"/></svg></div>
           <p class="wd-ba-caption">Photo placeholder — real client install coming soon</p>
         </div>
       </div>
