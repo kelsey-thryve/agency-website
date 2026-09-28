@@ -80,41 +80,46 @@
       .wd-benefits-grid { grid-template-columns: repeat(2, 1fr); gap: 36px 24px; }
     }
 
-    /* -- How it works -- */
+    /* -- How it works (vertical timeline, centered) -- */
     .wd-steps {
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 20px;
-      counter-reset: wdstep;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+      max-width: 420px;
+      margin: 0 auto;
     }
     .wd-step {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-      padding: 26px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      padding: 20px 0;
       position: relative;
+      text-align: center;
+    }
+    .wd-step:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      top: 62px;
+      bottom: -12px;
+      width: 2px;
+      background: linear-gradient(var(--border-2), var(--border-2));
     }
     .wd-step-num {
+      flex: 0 0 auto;
       display: inline-flex; align-items: center; justify-content: center;
-      width: 30px; height: 30px;
+      width: 42px; height: 42px;
       border-radius: 50%;
       background: var(--gradient);
       color: var(--white);
-      font-size: 13px; font-weight: 800;
-      margin-bottom: 16px;
+      font-size: 16px; font-weight: 800;
+      position: relative;
+      z-index: 1;
     }
-    .wd-step h3 { font-size: 15px; font-weight: 700; color: var(--white); margin-bottom: 8px; }
-    .wd-step p { font-size: 13px; color: var(--gray-2); line-height: 1.6; }
-    .wd-step-arrow {
-      display: none;
-    }
-
-    @media (max-width: 1100px) {
-      .wd-steps { grid-template-columns: repeat(2, 1fr); }
-    }
-    @media (max-width: 560px) {
-      .wd-steps { grid-template-columns: 1fr; }
-    }
+    .wd-step h3 { font-size: 17px; font-weight: 700; color: var(--white); }
 
     /* -- Live demo -- */
     .wd-demo-section { background: var(--bg-2); }
@@ -167,9 +172,8 @@
 
     /* -- Before / after -- */
     .wd-ba-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 24px;
+      max-width: 640px;
+      margin: 0 auto;
     }
     .wd-ba-card {
       background: var(--bg-card);
@@ -177,29 +181,16 @@
       border-radius: var(--radius-lg);
       overflow: hidden;
     }
-    .wd-ba-imgs { display: grid; grid-template-columns: 1fr 1fr; }
     .wd-ba-img {
       position: relative;
-      aspect-ratio: 3 / 4;
+      aspect-ratio: 4 / 3;
       display: flex; align-items: center; justify-content: center;
       background:
         repeating-linear-gradient(135deg, rgba(255,255,255,0.035) 0 12px, transparent 12px 24px),
         linear-gradient(160deg, var(--bg-3), var(--bg-card-2));
     }
     .wd-ba-img svg { width: 34%; height: 34%; opacity: 0.28; color: var(--gray-2); }
-    .wd-ba-tag {
-      position: absolute; top: 10px; left: 10px;
-      font-size: 10px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
-      background: rgba(7,7,10,0.65); color: var(--gray-1);
-      padding: 4px 9px; border-radius: 100px;
-      backdrop-filter: blur(6px);
-    }
-    .wd-ba-img.wd-after .wd-ba-tag { background: rgba(16,185,129,0.25); color: var(--green-light); }
     .wd-ba-caption { padding: 14px 16px 16px; font-size: 12px; color: var(--gray-3); border-top: 1px solid var(--border); }
-
-    @media (max-width: 860px) {
-      .wd-ba-grid { grid-template-columns: 1fr; }
-    }
 
     /* -- Book a demo / contact -- */
     .wd-book { text-align: center; }
@@ -289,6 +280,9 @@
         </div>
 
       </div>
+      <div style="text-align:center; margin-top:44px;">
+        <a href="#book" class="btn btn-primary btn-lg">Book Your Demo</a>
+      </div>
     </div>
   </section>
 
@@ -297,7 +291,7 @@
     <div class="container">
       <div class="section-header">
         <div class="section-badge">How It Works</div>
-        <h2 class="section-title">From Browser to<br /><span class="gradient-text">Booked Measure</span></h2>
+        <h2 class="section-title">Turn An Idea<br /><span class="gradient-text">Into Reality</span></h2>
         <p class="section-subtitle">No quiz, no quote form, no phone tag — just a visitor designing their own wardrobe.</p>
       </div>
 
@@ -305,28 +299,26 @@
         <div class="wd-step">
           <div class="wd-step-num">1</div>
           <h3>Upload their space</h3>
-          <p>The visitor drops in a photo of the wall, alcove or closet they want fitted out.</p>
         </div>
         <div class="wd-step">
           <div class="wd-step-num">2</div>
           <h3>Choose the essentials</h3>
-          <p>They tap the features they want — rails, drawers, shelving, lighting — and add notes on style or size.</p>
         </div>
         <div class="wd-step">
           <div class="wd-step-num">3</div>
           <h3>Instant render + AI consult</h3>
-          <p>A photorealistic render of the wardrobe in their actual room appears, while an AI design consultant asks a couple of quick questions to lock in finish, doors and lighting.</p>
         </div>
         <div class="wd-step">
           <div class="wd-step-num">4</div>
           <h3>Refine it live</h3>
-          <p>They chat back and forth — "make it walnut," "add a mirror" — and re-render until it's right.</p>
         </div>
         <div class="wd-step">
           <div class="wd-step-num">5</div>
           <h3>Book the measure</h3>
-          <p>They leave their name, email, phone and suburb. The finished spec, render and photo land with your team as a booked, qualified lead.</p>
         </div>
+      </div>
+      <div style="text-align:center; margin-top:44px;">
+        <a href="#book" class="btn btn-primary btn-lg">Book Your Demo</a>
       </div>
     </div>
   </section>
@@ -347,10 +339,13 @@
         </div>
         <div class="wd-demo-body" id="wdDemoBody">
           <!--
-            TODO (Kelsey): set DEMO_URL below once the wardrobe-app is deployed
-            (e.g. to Vercel, with GEMINI_API_KEY + optional RESEND_API_KEY set) and
-            point it at that URL. The iframe will then load automatically and this
-            fallback card will no longer be shown. No other page changes needed.
+            DEMO_URL below is set to the deployed wardrobe-app (Vercel). Note:
+            the automated build session that wired this up could not reach
+            *.vercel.app from its sandbox (network egress policy) to click
+            through the actual photo-upload -> render -> chat -> lead-capture
+            flow end to end. Please do one manual run-through before relying
+            on this for live outreach traffic. If it ever needs to fall back
+            to the placeholder card again, just blank out DEMO_URL below.
           -->
           <div class="wd-demo-fallback" id="wdDemoFallback">
             <div class="wd-pulse">✦</div>
@@ -362,6 +357,9 @@
         </div>
       </div>
       <p class="wd-demo-note">Loads the exact configurator your visitors would use — upload a photo, pick your must-haves, and get a real AI render of your space.</p>
+      <div style="text-align:center; margin-top:32px;">
+        <a href="#book" class="btn btn-primary btn-lg">Book Your Demo</a>
+      </div>
     </div>
   </section>
 
@@ -371,32 +369,18 @@
       <div class="section-header">
         <div class="section-badge">Real Rooms</div>
         <h2 class="section-title">Before &amp;<br /><span class="gradient-text">After</span></h2>
-        <p class="section-subtitle">Photos from real installs go here — every card below is a drop-in placeholder, ready to swap for client shots.</p>
+        <p class="section-subtitle">A photo from a real install goes here — this is a drop-in placeholder, ready to swap for a client shot.</p>
       </div>
 
       <div class="wd-ba-grid">
-        <!-- Each card takes two images (before / after) by src alone — no layout changes needed to add real photos. -->
+        <!-- Single image by src alone — no layout changes needed to add a real photo. -->
         <div class="wd-ba-card">
-          <div class="wd-ba-imgs">
-            <div class="wd-ba-img wd-before" data-slot="before-1"><span class="wd-ba-tag">Before</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="3" y="4" width="18" height="16" rx="1"/><path d="M3 10h18M9 4v16"/></svg></div>
-            <div class="wd-ba-img wd-after" data-slot="after-1"><span class="wd-ba-tag">After</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="1"/><path d="M8 3v18M14 3v18M3 9h5M16 9h5M3 15h5M16 15h5"/></svg></div>
-          </div>
+          <div class="wd-ba-img" data-slot="room-1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="1"/><path d="M8 3v18M14 3v18M3 9h5M16 9h5M3 15h5M16 15h5"/></svg></div>
           <p class="wd-ba-caption">Photo placeholder — real client install coming soon</p>
         </div>
-        <div class="wd-ba-card">
-          <div class="wd-ba-imgs">
-            <div class="wd-ba-img wd-before" data-slot="before-2"><span class="wd-ba-tag">Before</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="3" y="4" width="18" height="16" rx="1"/><path d="M3 10h18M9 4v16"/></svg></div>
-            <div class="wd-ba-img wd-after" data-slot="after-2"><span class="wd-ba-tag">After</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="1"/><path d="M8 3v18M14 3v18M3 9h5M16 9h5M3 15h5M16 15h5"/></svg></div>
-          </div>
-          <p class="wd-ba-caption">Photo placeholder — real client install coming soon</p>
-        </div>
-        <div class="wd-ba-card">
-          <div class="wd-ba-imgs">
-            <div class="wd-ba-img wd-before" data-slot="before-3"><span class="wd-ba-tag">Before</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="3" y="4" width="18" height="16" rx="1"/><path d="M3 10h18M9 4v16"/></svg></div>
-            <div class="wd-ba-img wd-after" data-slot="after-3"><span class="wd-ba-tag">After</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="1"/><path d="M8 3v18M14 3v18M3 9h5M16 9h5M3 15h5M16 15h5"/></svg></div>
-          </div>
-          <p class="wd-ba-caption">Photo placeholder — real client install coming soon</p>
-        </div>
+      </div>
+      <div style="text-align:center; margin-top:44px;">
+        <a href="#book" class="btn btn-primary btn-lg">Book Your Demo</a>
       </div>
     </div>
   </section>
@@ -408,12 +392,8 @@
         <div class="section-badge">Get Started</div>
         <h2 class="section-title">See This On<br /><span class="gradient-text">Your Website</span></h2>
         <p class="wd-book-sub">Book a live walkthrough and we'll show you exactly how it plugs into your site and starts booking measures.</p>
-        <!--
-          TODO (Kelsey): replace the mailto: link below with your real booking
-          link (Calendly / Google Calendar) before this page goes live to prospects.
-        -->
-        <a href="mailto:kelsey@thryvegrowth.com?subject=Wardrobe%20Designer%20Demo&body=Hi%20Kelsey%2C%0A%0AI%27d%20like%20to%20book%20a%20demo%20of%20the%20wardrobe%20designer%20tool.%0A%0A" class="btn btn-primary btn-lg">Book a Demo</a>
-        <p class="wd-book-note">Booking link coming soon — this currently opens an email to Kelsey directly.</p>
+        <a href="https://calendar.app.google/HitT1jkHamtfadhZ8" target="_blank" rel="noopener" class="btn btn-primary btn-lg">Book a Demo</a>
+        <p class="wd-book-note">Pick a time that works for you — we'll walk you through it live.</p>
       </div>
     </div>
   </section>
@@ -425,10 +405,10 @@
   </footer>
 
   <script>
-    // Live demo embed: set DEMO_URL once the wardrobe-app tool is deployed.
-    // Until then, the fallback card above stays visible and no request is made.
+    // Live demo embed. Blank out DEMO_URL to fall back to the placeholder card
+    // above instead (e.g. if the deployed tool goes down).
     (function () {
-      var DEMO_URL = ""; // e.g. "https://wardrobe-app-xyz.vercel.app"
+      var DEMO_URL = "https://wardrobe-app-seven-cyan.vercel.app/";
       if (!DEMO_URL) return;
       var iframe = document.getElementById('wdDemoIframe');
       var fallback = document.getElementById('wdDemoFallback');
