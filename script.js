@@ -234,6 +234,52 @@ if (contactForm) {
 }
 
 
+// ── Process scroll-driven carousel ──────────────────────────
+const processSection = document.getElementById('process');
+const slides = document.querySelectorAll('.process-slide');
+const dots   = document.querySelectorAll('.process-dot');
+
+if (processSection && slides.length) {
+  let current = 0;
+
+  function goTo(index, stepProgress) {
+    if (index !== current) {
+      slides[current].classList.remove('active');
+      dots[current].classList.remove('active');
+      current = index;
+      slides[current].classList.add('active');
+      dots[current].classList.add('active');
+    }
+    const bar = slides[current].querySelector('.slide-progress-bar');
+    if (bar) bar.style.width = (stepProgress * 100) + '%';
+  }
+
+  function onScroll() {
+    const sectionTop    = processSection.offsetTop;
+    const scrolled      = window.scrollY - sectionTop;
+    const scrollRange   = processSection.offsetHeight - window.innerHeight;
+    const progress      = Math.max(0, Math.min(1, scrolled / scrollRange));
+    const rawStep       = progress * slides.length;
+    const stepIndex     = Math.min(slides.length - 1, Math.floor(rawStep));
+    const stepProgress  = rawStep - Math.floor(rawStep);
+    goTo(stepIndex, stepIndex === slides.length - 1 ? 1 : stepProgress);
+  }
+
+  // Dot clicks: scroll to the right position in the section
+  dots.forEach(dot => {
+    dot.addEventListener('click', () => {
+      const stepIndex  = Number(dot.dataset.step);
+      const scrollRange = processSection.offsetHeight - window.innerHeight;
+      const target     = processSection.offsetTop + (stepIndex / slides.length) * scrollRange;
+      window.scrollTo({ top: target, behavior: 'smooth' });
+    });
+  });
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+}
+
+
 // ── Smooth scroll for anchor links ──────────────────────────
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
   anchor.addEventListener('click', (e) => {

@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Custom Wardrobes Designed For You - Thryve Growth</title>
+  <meta name="description" content="An interactive wardrobe designer that sits on your website, lets visitors configure their own layout, and turns them into a booked measure." />
+  <!-- Hidden sales/demo page: not linked from any nav, footer or sitemap. Reachable by direct URL only. -->
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg" />
+  <link rel="apple-touch-icon" href="../favicon-on-white-512.png" />
+  <link rel="stylesheet" href="../style.css" />
+  <style>
+    /* ============================================================
+       WARDROBE DEMO PAGE — scoped styles
+       Reuses tokens (--bg, --gradient, --indigo, --green, --radius…)
+       and shared classes (.container, .btn, .section, .section-title,
+       .section-badge, .gradient-text) from ../style.css
+       ============================================================ */
+
+    body { background: var(--bg); }
+
+    /* -- Minimal top bar (deliberately NOT the site nav / no menu links) -- */
+    .wd-topbar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      background: rgba(7,7,10,0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+    .wd-topbar-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 68px;
+    }
+    .wd-topbar .logo { font-size: 20px; }
+
+    /* -- Hero -- */
+    .wd-hero {
+      position: relative;
+      padding: 168px 0 90px;
+      overflow: hidden;
+      text-align: center;
+    }
+    .wd-hero-inner { position: relative; z-index: 1; }
+    .wd-hero .hero-title { margin-bottom: 18px; }
+    .wd-hero .hero-subtitle { margin-bottom: 40px; }
+    .wd-hero-cta {
+      display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;
+    }
+
+    /* -- Benefits row -- */
+    .wd-benefits { padding: 64px 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); background: var(--bg-2); }
+    .wd-benefits-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 32px;
+    }
+    .wd-benefit { text-align: center; }
+    .wd-benefit-icon {
+      width: 48px; height: 48px;
+      margin: 0 auto 16px;
+      display: flex; align-items: center; justify-content: center;
+      border-radius: var(--radius);
+      background: rgba(99,102,241,0.12);
+      border: 1px solid rgba(99,102,241,0.25);
+      color: var(--indigo-light);
+    }
+    .wd-benefit-icon svg { width: 22px; height: 22px; }
+    .wd-benefit h3 { font-size: 16px; font-weight: 700; color: var(--white); line-height: 1.35; margin-bottom: 6px; }
+    .wd-benefit p { font-size: 13px; color: var(--gray-3); line-height: 1.5; }
+
+    @media (max-width: 860px) {
+      .wd-benefits-grid { grid-template-columns: repeat(2, 1fr); gap: 36px 24px; }
+    }
+
+    /* -- How it works (vertical timeline, centered) -- */
+    .wd-steps {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+      max-width: 420px;
+      margin: 0 auto;
+    }
+    .wd-step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      padding: 20px 0;
+      position: relative;
+      text-align: center;
+    }
+    .wd-step:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      top: 62px;
+      bottom: -12px;
+      width: 2px;
+      background: linear-gradient(var(--border-2), var(--border-2));
+    }
+    .wd-step-num {
+      flex: 0 0 auto;
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 42px; height: 42px;
+      border-radius: 50%;
+      background: var(--gradient);
+      color: var(--white);
+      font-size: 16px; font-weight: 800;
+      position: relative;
+      z-index: 1;
+    }
+    .wd-step h3 { font-size: 17px; font-weight: 700; color: var(--white); }
+
+    /* -- Live demo -- */
+    .wd-demo-section { background: var(--bg-2); }
+    .wd-demo-frame-wrap {
+      max-width: 920px;
+      margin: 0 auto;
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--border-2);
+      background: var(--bg-card);
+      box-shadow: var(--shadow-lg);
+      overflow: hidden;
+    }
+    .wd-demo-chrome {
+      display: flex; align-items: center; gap: 8px;
+      padding: 14px 18px;
+      background: var(--bg-3);
+      border-bottom: 1px solid var(--border);
+    }
+    .wd-demo-dot { width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,0.15); }
+    .wd-demo-url {
+      margin-left: 12px;
+      font-size: 12px;
+      color: var(--gray-3);
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      padding: 4px 14px;
+    }
+    .wd-demo-body { position: relative; aspect-ratio: 16 / 10; background: var(--bg); }
+    .wd-demo-body iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+    .wd-demo-fallback {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      text-align: center; padding: 40px;
+      gap: 14px;
+    }
+    .wd-demo-fallback .wd-pulse {
+      width: 52px; height: 52px; border-radius: 50%;
+      background: var(--gradient);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--white); font-size: 22px;
+      margin-bottom: 6px;
+    }
+    .wd-demo-fallback h3 { font-size: 18px; color: var(--white); }
+    .wd-demo-fallback p { font-size: 14px; color: var(--gray-2); max-width: 420px; line-height: 1.6; }
+    .wd-demo-note {
+      max-width: 920px; margin: 18px auto 0; text-align: center;
+      font-size: 12px; color: var(--gray-3);
+    }
+
+    /* -- Before / after -- */
+    .wd-ba-grid {
+      max-width: 640px;
+      margin: 0 auto;
+    }
+    .wd-ba-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+    .wd-ba-img {
+      position: relative;
+      aspect-ratio: 4 / 3;
+      display: flex; align-items: center; justify-content: center;
+      background:
+        repeating-linear-gradient(135deg, rgba(255,255,255,0.035) 0 12px, transparent 12px 24px),
+        linear-gradient(160deg, var(--bg-3), var(--bg-card-2));
+    }
+    .wd-ba-img svg { width: 34%; height: 34%; opacity: 0.28; color: var(--gray-2); }
+    .wd-ba-caption { padding: 14px 16px 16px; font-size: 12px; color: var(--gray-3); border-top: 1px solid var(--border); }
+
+    /* -- Book a demo / contact -- */
+    .wd-book { text-align: center; }
+    .wd-book-inner { max-width: 560px; margin: 0 auto; }
+    .wd-book p.wd-book-sub { color: var(--gray-2); font-size: 16px; margin-bottom: 32px; }
+    .wd-book-note { margin-top: 16px; font-size: 12px; color: var(--gray-3); }
+
+    /* -- Minimal footer -- */
+    .wd-footer {
+      padding: 32px 0 40px;
+      text-align: center;
+      border-top: 1px solid var(--border);
+    }
+    .wd-footer p { font-size: 12px; color: var(--gray-3); }
+    .wd-footer a { color: var(--gray-2); }
+    .wd-footer a:hover { color: var(--white); }
+  </style>
+</head>
+<body>
+
+  <!-- MINIMAL TOP BAR — intentionally NOT the site's main nav component.
+       No links to Services / Process / Case Studies / AI Systems, and this
+       page itself is never linked from that nav, the footer, or a sitemap. -->
+  <header class="wd-topbar">
+    <div class="container wd-topbar-inner">
+      <a href="../index.html" class="logo">
+        <span class="logo-thryve">Thryve</span><span class="logo-growth">Growth</span>
+      </a>
+      <a href="#book" class="btn btn-primary btn-sm">Book a Demo</a>
+    </div>
+  </header>
+
+  <!-- 1. HERO -->
+  <section class="wd-hero">
+    <div class="hero-bg-grid"></div>
+    <div class="container wd-hero-inner">
+      <div class="section-badge">For Custom Wardrobe &amp; Closet Studios</div>
+      <h1 class="hero-title">
+        Custom Wardrobes<br />
+        <span class="gradient-text">Designed For You</span>
+      </h1>
+      <p class="hero-subtitle">
+        The ultimate lead generation tool for custom wardrobe designers.
+      </p>
+      <div class="wd-hero-cta">
+        <a href="#demo" class="btn btn-primary btn-lg">Try the Live Demo</a>
+        <a href="#book" class="btn btn-ghost btn-lg">Book a Demo Call</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. QUICK BENEFITS ROW -->
+  <section class="wd-benefits">
+    <div class="container">
+      <div class="wd-benefits-grid">
+
+        <div class="wd-benefit">
+          <div class="wd-benefit-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="0.5" fill="currentColor"/></svg>
+          </div>
+          <h3>Turns Browsers Into Qualified Leads</h3>
+          <p>Visitors design their own wardrobe instead of bouncing off a static gallery page.</p>
+        </div>
+
+        <div class="wd-benefit">
+          <div class="wd-benefit-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 16l5-5 3 3 4-4"/><path d="M3 5h18v3H3zM3 12v7M21 12v7M8 20h8"/></svg>
+          </div>
+          <h3>Captures Measurements Automatically</h3>
+          <p>Room photo and specs land with you — no site visit needed to quote.</p>
+        </div>
+
+        <div class="wd-benefit">
+          <div class="wd-benefit-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 8V6a2 2 0 012-2h2M20 8V6a2 2 0 00-2-2h-2M4 16v2a2 2 0 002 2h2M20 16v2a2 2 0 01-2 2h-2M9 12h6"/></svg>
+          </div>
+          <h3>Plugs Into Any Website</h3>
+          <p>Drops straight into your existing site — no rebuild required.</p>
+        </div>
+
+        <div class="wd-benefit">
+          <div class="wd-benefit-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/><path d="M9 15l2 2 4-4"/></svg>
+          </div>
+          <h3>Books Consults With Zero Back-and-Forth</h3>
+          <p>Qualified leads arrive ready to book a measure — not a cold enquiry.</p>
+        </div>
+
+      </div>
+      <div style="text-align:center; margin-top:44px;">
+        <a href="#book" class="btn btn-primary btn-lg">Book Your Demo</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. HOW IT WORKS -->
+  <section class="section" id="how-it-works">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-badge">How It Works</div>
+        <h2 class="section-title">Turn An Idea<br /><span class="gradient-text">Into Reality</span></h2>
+        <p class="section-subtitle">No quiz, no quote form, no phone tag — just a visitor designing their own wardrobe.</p>
+      </div>
+
+      <div class="wd-steps">
+        <div class="wd-step">
+          <div class="wd-step-num">1</div>
+          <h3>Upload their space</h3>
+        </div>
+        <div class="wd-step">
+          <div class="wd-step-num">2</div>
+          <h3>Choose the essentials</h3>
+        </div>
+        <div class="wd-step">
+          <div class="wd-step-num">3</div>
+          <h3>Instant render + AI consult</h3>
+        </div>
+        <div class="wd-step">
+          <div class="wd-step-num">4</div>
+          <h3>Refine it live</h3>
+        </div>
+        <div class="wd-step">
+          <div class="wd-step-num">5</div>
+          <h3>Book the measure</h3>
+        </div>
+      </div>
+      <div style="text-align:center; margin-top:44px;">
+        <a href="#book" class="btn btn-primary btn-lg">Book Your Demo</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. LIVE DEMO -->
+  <section class="section wd-demo-section" id="demo">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-badge">Live Demo</div>
+        <h2 class="section-title">Design Your<br /><span class="gradient-text">Wardrobe</span></h2>
+        <p class="section-subtitle">This is the real tool — try it yourself, exactly as your website visitors would.</p>
+      </div>
+
+      <div class="wd-demo-frame-wrap">
+        <div class="wd-demo-chrome">
+          <span class="wd-demo-dot"></span><span class="wd-demo-dot"></span><span class="wd-demo-dot"></span>
+          <span class="wd-demo-url">yourwebsite.com/design</span>
+        </div>
+        <div class="wd-demo-body" id="wdDemoBody">
+          <!--
+            DEMO_URL below is set to the deployed wardrobe-app (Vercel). Note:
+            the automated build session that wired this up could not reach
+            *.vercel.app from its sandbox (network egress policy) to click
+            through the actual photo-upload -> render -> chat -> lead-capture
+            flow end to end. Please do one manual run-through before relying
+            on this for live outreach traffic. If it ever needs to fall back
+            to the placeholder card again, just blank out DEMO_URL below.
+          -->
+          <div class="wd-demo-fallback" id="wdDemoFallback">
+            <div class="wd-pulse">✦</div>
+            <h3>Live interactive demo — deploying now</h3>
+            <p>The full tool (photo upload, AI render and live design chat) is being moved onto its own hosting. Book a call below and we'll walk you through it live in the meantime.</p>
+            <a href="#book" class="btn btn-ghost btn-sm" style="margin-top:6px;">Book a Demo Call</a>
+          </div>
+          <iframe id="wdDemoIframe" title="Wardrobe designer live demo" loading="lazy" style="display:none;"></iframe>
+        </div>
+      </div>
+      <p class="wd-demo-note">Loads the exact configurator your visitors would use — upload a photo, pick your must-haves, and get a real AI render of your space.</p>
+      <div style="text-align:center; margin-top:32px;">
+        <a href="#book" class="btn btn-primary btn-lg">Book Your Demo</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. BEFORE / AFTER -->
+  <section class="section" id="gallery">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-badge">Real Rooms</div>
+        <h2 class="section-title">Before &amp;<br /><span class="gradient-text">After</span></h2>
+        <p class="section-subtitle">A photo from a real install goes here — this is a drop-in placeholder, ready to swap for a client shot.</p>
+      </div>
+
+      <div class="wd-ba-grid">
+        <!-- Single image by src alone — no layout changes needed to add a real photo. -->
+        <div class="wd-ba-card">
+          <div class="wd-ba-img" data-slot="room-1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="1"/><path d="M8 3v18M14 3v18M3 9h5M16 9h5M3 15h5M16 15h5"/></svg></div>
+          <p class="wd-ba-caption">Photo placeholder — real client install coming soon</p>
+        </div>
+      </div>
+      <div style="text-align:center; margin-top:44px;">
+        <a href="#book" class="btn btn-primary btn-lg">Book Your Demo</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. CONTACT / BOOK A DEMO (reviews section intentionally omitted — no reviews exist yet for v1) -->
+  <section class="section wd-book" id="book">
+    <div class="container">
+      <div class="wd-book-inner">
+        <div class="section-badge">Get Started</div>
+        <h2 class="section-title">See This On<br /><span class="gradient-text">Your Website</span></h2>
+        <p class="wd-book-sub">Book a live walkthrough and we'll show you exactly how it plugs into your site and starts booking measures.</p>
+        <a href="https://calendar.app.google/HitT1jkHamtfadhZ8" target="_blank" rel="noopener" class="btn btn-primary btn-lg">Book a Demo</a>
+        <p class="wd-book-note">Pick a time that works for you — we'll walk you through it live.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer class="wd-footer">
+    <div class="container">
+      <p>© 2026 Thryve Growth Ltd. · <a href="mailto:kelsey@thryvegrowth.com">kelsey@thryvegrowth.com</a></p>
+    </div>
+  </footer>
+
+  <script>
+    // Live demo embed. Blank out DEMO_URL to fall back to the placeholder card
+    // above instead (e.g. if the deployed tool goes down).
+    (function () {
+      var DEMO_URL = "https://wardrobe-app-seven-cyan.vercel.app/";
+      if (!DEMO_URL) return;
+      var iframe = document.getElementById('wdDemoIframe');
+      var fallback = document.getElementById('wdDemoFallback');
+      iframe.src = DEMO_URL;
+      iframe.style.display = 'block';
+      fallback.style.display = 'none';
+    })();
+  </script>
+</body>
+</html>
